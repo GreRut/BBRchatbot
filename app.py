@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
 
 def main():
     load_dotenv()
@@ -24,7 +26,9 @@ def main():
         )
 
         chunks = text_splitter.split_text(text)
-        st.write(chunks)
+        
+        embeddings = OpenAIEmbeddings()
+        knowledge_base = FAISS.from_texts(chunks, embeddings)
 
 if __name__ == '__main__':
     main()
